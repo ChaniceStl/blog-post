@@ -62,25 +62,38 @@
 		displayName: 'Posts',
 	
 		getInitialState: function getInitialState() {
-			return { data: "" };
+			return { data: "", inputBox: false };
 		},
 		componentDidMount: function componentDidMount() {
 			var that = this;
 			console.log("hello");
 			_jquery2.default.ajax({
 				url: "/api/post",
+				type: "GET",
 				success: function success(data) {
 					console.log(data);
 					that.setState({ data: data });
 				}
 			});
 		},
+	
 		render: function render() {
-			var post = this.state.data ? this.state.data.map(function (post, idx) {
+			var _this = this;
+	
+			var post = this.state.data ? this.state.data.map(function (post, idx, _id) {
 				return _react2.default.createElement(
-					'li',
+					'div',
 					{ key: idx },
-					post.title
+					_react2.default.createElement(
+						'li',
+						{ key: idx, className: post._id },
+						post.title
+					),
+					_react2.default.createElement(
+						'button',
+						{ key: idx + 1, className: post._id, onClick: _this.updatePost },
+						'Update'
+					)
 				);
 			}) : null;
 	
@@ -94,6 +107,41 @@
 	
 	var NewPostForm = _react2.default.createClass({
 		displayName: 'NewPostForm',
+	
+		getInitialState: function getInitialState() {
+			return { input: "" };
+		},
+		handleChange: function handleChange(e) {
+			this.setState({ input: e.target.value });
+		},
+		makeNewPost: function makeNewPost(e) {
+			e.preventDefault();
+			var body = this.state.input;
+			_jquery2.default.ajax({
+				url: '/api/post',
+				type: 'POST',
+				data: { post: body }
+			});
+		},
+		render: function render() {
+			return _react2.default.createElement(
+				'div',
+				null,
+				_react2.default.createElement(
+					'form',
+					{ onSubmit: this.makeNewPost },
+					_react2.default.createElement('input', { type: 'text', placeholder: 'body',
+						value: this.state.input,
+						onChange: this.handleChange }),
+					_react2.default.createElement('input', { type: 'submit' })
+				),
+				_react2.default.createElement(Posts, null)
+			);
+		}
+	});
+	
+	var AuthorForm = _react2.default.createClass({
+		displayName: 'AuthorForm',
 	
 		getInitialState: function getInitialState() {
 			return { input: "" };
