@@ -14,9 +14,18 @@ const getPosts = (req, res) => {
 
 //Create a new test post in database
 const postPosts = (req, res) => {
-  console.log(req.body)
-  Post.create({title: req.body.title, test: 'sucessfully created a test post'}, () => {
+  console.log(req.body.post)
+  Post.create({title: req.body.post, test: 'sucessfully created a test post'}, () => {
     console.log('post successfully created');
+  })
+}
+
+const deletePost = (req, res) => {
+  console.log(req.body)
+  Post.remove(req.body, (err)=> {
+   if(err){
+      console.log('error')
+    }
   })
 }
 
@@ -24,6 +33,7 @@ const postPosts = (req, res) => {
 router.route('/')
   .get(getPosts)
   .post(postPosts)
+  .delete(deletePost)
 
 
 module.exports = router;

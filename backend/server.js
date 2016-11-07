@@ -15,6 +15,8 @@ var bodyParser = require('body-parser');
 //Require in models:
 //(this is a necessary step that loads our models and registers them with mongoose)
 const models = require('./index').models;
+
+// const Post = mongoose.model('Post');
 //Require in routes:
 const routes = require('./index').routes;
 
