@@ -20,11 +20,25 @@ const postPosts = (req, res) => {
   })
 }
 
+
 const deletePost = (req, res) => {
   console.log(req.body)
-  Post.remove(req.body, (err)=> {
+  Post.remove(req.body, (err) => {
    if(err){
       console.log('error')
+    }
+  })
+}
+
+//Update a post in database
+const updatePost = (req, res) => {
+  console.log(req.body)
+  Post.findByIdAndUpdate(req.body, (err, post) => {
+    if(err) {
+      console.log('error')
+    } else {
+      res.send(post)
+      console.log('post successfully updated!')
     }
   })
 }
@@ -34,6 +48,7 @@ router.route('/')
   .get(getPosts)
   .post(postPosts)
   .delete(deletePost)
+  .put(updatePost)
 
 
 module.exports = router;

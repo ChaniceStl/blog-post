@@ -4,7 +4,9 @@ import $ from 'jquery';
 import {Router ,browserHistory, IndexRoute, Route, Link} from "react-router";
 import GetPost from "./component/getpost.js"
 import DeletePost from "./component/deletepost.js"
+import UpdatePost from "./component/updatepost.js"
 import NavBar from "./component/navbar.js"
+import PostAuthor from "./component/authors/postauthor.js"
 
 
 var PostForm = React.createClass({
@@ -27,37 +29,39 @@ var PostForm = React.createClass({
     	this.setState({data: data})
     },
     render: function() {
-console.log(this.state.data)
-
     	const childrenWithProps = React.Children.map(this.props.children,
      (child) => React.cloneElement(child, {
        changeParentState: this.changeParentState,
        data: this.state.data
      })
     );
-        return ( 
+        return (
         	<div>
-           <NavBar/><br/>
+            <NavBar/><br/>
             <form onSubmit={ this.makeNewPost }>
 	            <input type="text"
-	            placeholder="body"
-	            value={this.state.input}
-	            onChange={this.handleChange}>
+                placeholder="body"
+                value={this.state.input}
+                onChange={this.handleChange}>
 	            </input>
 	            <input type = "submit" value="submit"></input>
             </form>
-           {childrenWithProps}
-           </div>
+            {childrenWithProps}
+          </div>
         )
     }
 });
 
-render( 
+render(
  <Router history={browserHistory}>
- 	<Route path="/" component={PostForm}>
- 		<Route path="/post" component={GetPost}/>
- 		<Route path="/deletepost" component={DeletePost}/>
- 	</Route>
+   <Route path="/" component={PostForm}>
+     <Route path="/post" component={GetPost}/>
+     <Route path="/deletepost" component={DeletePost}/>
+     <Route path="/updatepost" component={UpdatePost}/>
+   </Route>
+
+   <Route path="/author" component={PostAuthor}>
+   </Route>
  </Router>
    ,document.getElementById('root')
 );

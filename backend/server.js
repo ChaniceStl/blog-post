@@ -30,6 +30,8 @@ const db = mongoose.connection;
 db.on('open', () => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use('/api/post', routes.posts);
+  app.use('/api/author', routes.authors);
+  app.use('/api/reader', routes.readers);
   app.use(express.static('bundle'))
   // app.use(express.static('images'))
   app.use('*', routes.home);

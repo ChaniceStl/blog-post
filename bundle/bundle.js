@@ -66,9 +66,17 @@
 	
 	var _deletepost2 = _interopRequireDefault(_deletepost);
 	
-	var _navbar = __webpack_require__(230);
+	var _updatepost = __webpack_require__(230);
+	
+	var _updatepost2 = _interopRequireDefault(_updatepost);
+	
+	var _navbar = __webpack_require__(231);
 	
 	var _navbar2 = _interopRequireDefault(_navbar);
+	
+	var _postauthor = __webpack_require__(232);
+	
+	var _postauthor2 = _interopRequireDefault(_postauthor);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -96,8 +104,6 @@
 	
 	    render: function render() {
 	        var _this = this;
-	
-	        console.log(this.state.data);
 	
 	        var childrenWithProps = _react2.default.Children.map(this.props.children, function (child) {
 	            return _react2.default.cloneElement(child, {
@@ -131,8 +137,10 @@
 	        _reactRouter.Route,
 	        { path: '/', component: PostForm },
 	        _react2.default.createElement(_reactRouter.Route, { path: '/post', component: _getpost2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/deletepost', component: _deletepost2.default })
-	    )
+	        _react2.default.createElement(_reactRouter.Route, { path: '/deletepost', component: _deletepost2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/updatepost', component: _updatepost2.default })
+	    ),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/author', component: _postauthor2.default })
 	), document.getElementById('root'));
 
 /***/ },
@@ -36658,7 +36666,6 @@
 	
 	
 	    componentDidMount: function componentDidMount() {
-	        console.log("hello");
 	        var that = this;
 	        _jquery2.default.ajax({
 	            url: "/api/post",
@@ -36676,7 +36683,6 @@
 	                post.title
 	            );
 	        }) : null;
-	        console.log('render');
 	        return _react2.default.createElement(
 	            "ul",
 	            null,
@@ -36691,7 +36697,7 @@
 /* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -36708,10 +36714,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var DeletePost = _react2.default.createClass({
-	    displayName: 'DeletePost',
+	    displayName: "DeletePost",
 	
 	    deletePost: function deletePost(postId) {
-	        console.log('alright');
 	        _jquery2.default.ajax({
 	            url: "/api/post",
 	            type: 'DELETE',
@@ -36723,21 +36728,21 @@
 	
 	        var post = this.props.data ? this.props.data.map(function (post, idx) {
 	            return _react2.default.createElement(
-	                'li',
+	                "li",
 	                { key: idx },
 	                _react2.default.createElement(
-	                    'button',
+	                    "button",
 	                    { onClick: function onClick() {
 	                            return _this.deletePost(post._id);
 	                        } },
-	                    'Delete Post'
+	                    "Delete Post"
 	                ),
 	                post.title
 	            );
 	        }) : null;
 	
 	        return _react2.default.createElement(
-	            'div',
+	            "div",
 	            null,
 	            post
 	        );
@@ -36748,6 +36753,99 @@
 
 /***/ },
 /* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _jquery = __webpack_require__(172);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var UpdatePost = _react2.default.createClass({
+		displayName: "UpdatePost",
+		getInitialState: function getInitialState() {
+			return { _id: this.props.data._id, title: this.props.data.title, update_field: false };
+		},
+		updatePost: function updatePost() {
+			this.setState({ update_field: true });
+		},
+		handleChange: function handleChange(e) {
+			this.setState({ title: e.target.value });
+		},
+		submitPost: function submitPost(postId, title) {
+			_jquery2.default.ajax({
+				url: "/api/post",
+				type: 'PUT',
+				data: { _id: postId, post: title, new: true }
+			});
+		},
+		seeInitialState: function seeInitialState() {
+			console.log("Title: ", this.state.title);
+		},
+		renderPosts: function renderPosts() {
+			var _this = this;
+	
+			var post = this.props.data ? this.props.data.map(function (post, idx) {
+				return _react2.default.createElement(
+					"li",
+					{ key: idx },
+					_react2.default.createElement(
+						"button",
+						{ onClick: function onClick() {
+								return _this.updatePost();
+							} },
+						"Update Post"
+					),
+					post.title
+				);
+			}) : null;
+	
+			return _react2.default.createElement(
+				"div",
+				null,
+				post
+			);
+		},
+		renderUpdateForm: function renderUpdateForm() {
+			var _this2 = this;
+	
+			console.log("Title: ", this.state.title);
+			return _react2.default.createElement(
+				"form",
+				{ onSubmit: function onSubmit() {
+						return _this2.submitPost(_this2.state._id, _this2.state.title);
+					} },
+				_react2.default.createElement("input", { type: "text",
+					placeholder: this.state.title,
+					onChange: this.handleChange,
+					value: this.state.title }),
+				_react2.default.createElement("input", { type: "submit", value: "Update Post" }),
+				_react2.default.createElement("input", { type: "button", onClick: this.seeInitialState, value: "Initial State" })
+			);
+		},
+		render: function render() {
+			if (this.state.update_field) {
+				return this.renderUpdateForm();
+			} else {
+				return this.renderPosts();
+			}
+		}
+	});
+	
+	exports.default = UpdatePost;
+
+/***/ },
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36793,6 +36891,13 @@
 						"Delete Post"
 					),
 					" ",
+					_react2.default.createElement("span", null),
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: "/updatepost" },
+						"Update Post"
+					),
+					" ",
 					_react2.default.createElement("span", null)
 				)
 			);
@@ -36800,6 +36905,96 @@
 	});
 	
 	exports.default = NavBar;
+
+/***/ },
+/* 232 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _jquery = __webpack_require__(172);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var PostAuthor = _react2.default.createClass({
+	  displayName: "PostAuthor",
+	  getInitialState: function getInitialState() {
+	    return { name: "", email: "", bio: "", articles: [] };
+	  },
+	  handleChange: function handleChange(propertyName, e) {
+	    console.log("Property name: ", propertyName, ":", "Event: ", e.target.value);
+	    var state = this.state;
+	    state[propertyName] = e.target.value;
+	    this.setState(state);
+	  },
+	
+	  makeNewAuthor: function makeNewAuthor(e) {
+	    e.preventDefault();
+	    var body = this.state;
+	    _jquery2.default.ajax({
+	      url: '/api/author',
+	      type: 'POST',
+	      data: { name: body.name,
+	        email: body.email,
+	        bio: body.bio,
+	        articles: body.articles
+	      }
+	    });
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    return _react2.default.createElement(
+	      "div",
+	      null,
+	      _react2.default.createElement(
+	        "form",
+	        { onSubmit: this.makeNewAuthor },
+	        _react2.default.createElement("input", { type: "text",
+	          name: "name",
+	          placeholder: "Name",
+	          value: this.state.name,
+	          onChange: function onChange(e) {
+	            return _this.handleChange('name', e);
+	          } }),
+	        _react2.default.createElement("input", { type: "email",
+	          name: "email",
+	          placeholder: "Email",
+	          value: this.state.email,
+	          onChange: function onChange(e) {
+	            return _this.handleChange('email', e);
+	          } }),
+	        _react2.default.createElement("input", { type: "text",
+	          name: "bio",
+	          placeholder: "Bio",
+	          value: this.state.bio,
+	          onChange: function onChange(e) {
+	            return _this.handleChange('bio', e);
+	          } }),
+	        _react2.default.createElement("input", { type: "text",
+	          name: "articles",
+	          placeholder: "Articles",
+	          value: this.state.articles,
+	          onChange: function onChange(e) {
+	            return _this.handleChange('articles', e);
+	          } }),
+	        _react2.default.createElement("input", { type: "submit", value: "submit" })
+	      )
+	    );
+	  }
+	});
+	
+	exports.default = PostAuthor;
 
 /***/ }
 /******/ ]);
