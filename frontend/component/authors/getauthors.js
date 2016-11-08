@@ -1,12 +1,12 @@
 import React from "react"
 import $ from "jquery"
 
- var GetPost = React.createClass({
+ var GetAuthor = React.createClass({
 
     componentDidMount: function() {
         var that = this;
         $.ajax({
-            url: "/api/post",
+            url: "/api/author",
             type: 'GET',
             success: function(data) {
                that.props.changeParentState(data);
@@ -14,15 +14,15 @@ import $ from "jquery"
         })
     },
     render() {
-        let post = this.props.data ? this.props.data.map((post, idx) => {
-            return <li key={idx}>{post.title}</li>
+        let author = this.props.data ? this.props.data.map((author, idx) => {
+            return <li key={idx}>{author.title}</li>
         }) : null
         return (
         	 <ul>
-             {post}
+             {author}
         	 </ul>
         	 )
    		 }
 });
 
- export default GetPost;
+ export default GetAuthor;

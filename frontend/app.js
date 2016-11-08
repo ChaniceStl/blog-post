@@ -4,7 +4,9 @@ import $ from 'jquery';
 import {Router ,browserHistory, IndexRoute, Route, Link} from "react-router";
 import GetPost from "./component/getpost.js"
 import DeletePost from "./component/deletepost.js"
+import UpdatePost from "./component/updatepost.js"
 import NavBar from "./component/navbar.js"
+
 
 var PostForm = React.createClass({
     getInitialState: function() {
@@ -26,44 +28,7 @@ var PostForm = React.createClass({
     	this.setState({data: data})
     },
     render: function() {
-console.log(this.state.data)
-		}
-	});
-
-var NewPostForm = React.createClass({
-	getInitialState: function () {
-		return {input: ""}
-	},
-	handleChange: function (e) {
-		this.setState({input: e.target.value});
-	},
-	makeNewPost: function (e) {
-		e.preventDefault();
-		let body = this.state.input;
-		$.ajax({
-			url: '/api/post',
-			type: 'POST',
-			data: {post: body}
-		});
-	},
-	render: function () {
-		return (
-			<div>
-				<form onSubmit={this.makeNewPost}>
-					<input type="text" placeholder="body"
-					value={this.state.input}
-					onChange={this.handleChange}></input>
-					<input type="submit"></input>
-				</form>
-
-				<Posts />
-
-			</div>
-		)
-	}
-});
-
-const childrenWithProps = React.Children.map(this.props.children,
+    	const childrenWithProps = React.Children.map(this.props.children,
      (child) => React.cloneElement(child, {
        changeParentState: this.changeParentState,
        data: this.state.data
@@ -71,27 +36,34 @@ const childrenWithProps = React.Children.map(this.props.children,
     );
         return (
         	<div>
-           <NavBar/><br/>
+            <NavBar/><br/>
             <form onSubmit={ this.makeNewPost }>
 	            <input type="text"
-	            placeholder="body"
-	            value={this.state.input}
-	            onChange={this.handleChange}>
+                placeholder="body"
+                value={this.state.input}
+                onChange={this.handleChange}>
 	            </input>
 	            <input type = "submit" value="submit"></input>
             </form>
-           {childrenWithProps}
-           </div>
+            {childrenWithProps}
+          </div>
         )
     }
 });
 
 render(
  <Router history={browserHistory}>
- 	<Route path="/" component={PostForm}>
- 		<Route path="/post" component={GetPost}/>
- 		<Route path="/deletepost" component={DeletePost}/>
- 	</Route>
+   <Route path="/" component={PostForm}>
+     <Route path="/post" component={GetPost}/>
+     <Route path="/deletepost" component={DeletePost}/>
+     <Route path="/updatepost" component={UpdatePost}/>
+   </Route>
+
+   <Route path="/author" component={PostAuthor}>
+     <Route path="/getauthor" component={GetAuthor}/>
+     <Route path="/deleteauthor" component={DeleteAuthor}/>
+     <Route path="/updateauthor" component={UpdateAuthor}/>
+   </Route>
  </Router>
    ,document.getElementById('root')
 );

@@ -28,15 +28,20 @@ const postReader = (req, res) => {
                   })
 }
 
-//Update a post in database
-// const updatePost = (req, res) {
-//   Post.update()
-// }
+const deleteReader = (req, res) => {
+  console.log(req.body)
+  Reader.remove(req.body, (err) => {
+   if(err){
+      console.log('error')
+    }
+  })
+}
 
 //Configure router for get and post calls
 router.route('/')
   .get(getReader)
   .post(postReader)
+  .delete(deleteReader)
 
 
 module.exports = router;

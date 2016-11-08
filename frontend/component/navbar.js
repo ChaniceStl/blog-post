@@ -9,6 +9,7 @@ const NavBar = React.createClass({
 					<Link to="/">Create New Post</Link> <span/>
 					<Link to ="/post">View Post</Link> <span/>
 					<Link to="/deletepost">Delete Post</Link> <span/>
+					<Link to="/updatepost">Update Post</Link> <span/>
 				</div>
 			</nav>
 			)

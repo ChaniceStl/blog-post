@@ -26,15 +26,20 @@ const postAuthor = (req, res) => {
                   })
 }
 
-//Update a post in database
-// const updatePost = (req, res) {
-//   Post.update()
-// }
+const deleteAuthor = (req, res) => {
+  console.log(req.body)
+  Author.remove(req.body, (err) => {
+   if(err){
+      console.log('error')
+    }
+  })
+}
 
 //Configure router for get and post calls
 router.route('/')
   .get(getAuthor)
   .post(postAuthor)
+  .delete(deleteAuthor)
 
 
 module.exports = router;
