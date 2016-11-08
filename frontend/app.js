@@ -6,6 +6,7 @@ import GetPost from "./component/getpost.js"
 import DeletePost from "./component/deletepost.js"
 import UpdatePost from "./component/updatepost.js"
 import NavBar from "./component/navbar.js"
+import PostAuthor from "./component/authors/postauthor.js"
 
 
 var PostForm = React.createClass({
@@ -60,9 +61,6 @@ render(
    </Route>
 
    <Route path="/author" component={PostAuthor}>
-     <Route path="/getauthor" component={GetAuthor}/>
-     <Route path="/deleteauthor" component={DeleteAuthor}/>
-     <Route path="/updateauthor" component={UpdateAuthor}/>
    </Route>
  </Router>
    ,document.getElementById('root')

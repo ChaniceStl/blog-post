@@ -1,45 +1,63 @@
 import React from "react"
 import $ from "jquery"
 
-var postAuthor = React.createClass({
-    getInitialState: function() {
-        return { input: "" , data: ""}
+var PostAuthor = React.createClass({
+    getInitialState() {
+        return { name: "" , email: "", bio: "", articles: []}
     },
-    handleChange: function(e) {
-        this.setState({ input: e.target.value });
+    handleChange(propertyName, e) {
+      console.log("Property name: ", propertyName, ":", "Event: ", e.target.value)
+      var state = this.state;
+      state[propertyName] = e.target.value
+        this.setState(state);
     },
     makeNewAuthor: function(e) {
         e.preventDefault();
-        let body = this.state.input;
+        let body = this.state;
         $.ajax({
-            url: '/api/post',
+            url: '/api/author',
             type: 'POST',
-            data: { post: body }
+            data: { name: body.name,
+                    email: body.email,
+                    bio: body.bio,
+                    articles: body.articles
+                  }
         });
     },
-    changeParentState(data){
-    	this.setState({data: data})
-    },
-    render: function() {
-    	const childrenWithProps = React.Children.map(this.props.children,
-     (child) => React.cloneElement(child, {
-       changeParentState: this.changeParentState,
-       data: this.state.data
-     })
-    );
+    render() {
         return (
         	<div>
-           <NavBar/><br/>
-            <form onSubmit={ this.makeNewPost }>
+            <form onSubmit={ this.makeNewAuthor }>
 	            <input type="text"
-	            placeholder="body"
-	            value={this.state.input}
-	            onChange={this.handleChange}>
+                name="name"
+                placeholder="Name"
+                value={this.state.name}
+                onChange={(e) => this.handleChange('name', e)}>
 	            </input>
-	            <input type = "submit" value="submit"></input>
+
+              <input type="email"
+                name="email"
+                placeholder="Email"
+                value={this.state.email}
+                onChange={(e) => this.handleChange('email', e)}>
+              </input>
+
+              <input type="text"
+                name="bio"
+                placeholder="Bio"
+                value={this.state.bio}
+                onChange={(e) => this.handleChange('bio', e)}>
+              </input>
+
+              <input type="text"
+                name="articles"
+                placeholder="Articles"
+                value={this.state.articles}
+                onChange={(e) => this.handleChange('articles', e)}>
+              </input>
+              <input type = "submit" value="submit"></input>
             </form>
-           {childrenWithProps}
-           </div>
+          </div>
         )
     }
 });

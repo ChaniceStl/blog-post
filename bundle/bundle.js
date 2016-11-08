@@ -74,6 +74,10 @@
 	
 	var _navbar2 = _interopRequireDefault(_navbar);
 	
+	var _postauthor = __webpack_require__(232);
+	
+	var _postauthor2 = _interopRequireDefault(_postauthor);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var PostForm = _react2.default.createClass({
@@ -136,13 +140,7 @@
 	        _react2.default.createElement(_reactRouter.Route, { path: '/deletepost', component: _deletepost2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/updatepost', component: _updatepost2.default })
 	    ),
-	    _react2.default.createElement(
-	        _reactRouter.Route,
-	        { path: '/author', component: PostAuthor },
-	        _react2.default.createElement(_reactRouter.Route, { path: '/getauthor', component: GetAuthor }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/deleteauthor', component: DeleteAuthor }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/updateauthor', component: UpdateAuthor })
-	    )
+	    _react2.default.createElement(_reactRouter.Route, { path: '/author', component: _postauthor2.default })
 	), document.getElementById('root'));
 
 /***/ },
@@ -36907,6 +36905,96 @@
 	});
 	
 	exports.default = NavBar;
+
+/***/ },
+/* 232 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _jquery = __webpack_require__(172);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var PostAuthor = _react2.default.createClass({
+	  displayName: "PostAuthor",
+	  getInitialState: function getInitialState() {
+	    return { name: "", email: "", bio: "", articles: [] };
+	  },
+	  handleChange: function handleChange(propertyName, e) {
+	    console.log("Property name: ", propertyName, ":", "Event: ", e.target.value);
+	    var state = this.state;
+	    state[propertyName] = e.target.value;
+	    this.setState(state);
+	  },
+	
+	  makeNewAuthor: function makeNewAuthor(e) {
+	    e.preventDefault();
+	    var body = this.state;
+	    _jquery2.default.ajax({
+	      url: '/api/author',
+	      type: 'POST',
+	      data: { name: body.name,
+	        email: body.email,
+	        bio: body.bio,
+	        articles: body.articles
+	      }
+	    });
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    return _react2.default.createElement(
+	      "div",
+	      null,
+	      _react2.default.createElement(
+	        "form",
+	        { onSubmit: this.makeNewAuthor },
+	        _react2.default.createElement("input", { type: "text",
+	          name: "name",
+	          placeholder: "Name",
+	          value: this.state.name,
+	          onChange: function onChange(e) {
+	            return _this.handleChange('name', e);
+	          } }),
+	        _react2.default.createElement("input", { type: "email",
+	          name: "email",
+	          placeholder: "Email",
+	          value: this.state.email,
+	          onChange: function onChange(e) {
+	            return _this.handleChange('email', e);
+	          } }),
+	        _react2.default.createElement("input", { type: "text",
+	          name: "bio",
+	          placeholder: "Bio",
+	          value: this.state.bio,
+	          onChange: function onChange(e) {
+	            return _this.handleChange('bio', e);
+	          } }),
+	        _react2.default.createElement("input", { type: "text",
+	          name: "articles",
+	          placeholder: "Articles",
+	          value: this.state.articles,
+	          onChange: function onChange(e) {
+	            return _this.handleChange('articles', e);
+	          } }),
+	        _react2.default.createElement("input", { type: "submit", value: "submit" })
+	      )
+	    );
+	  }
+	});
+	
+	exports.default = PostAuthor;
 
 /***/ }
 /******/ ]);

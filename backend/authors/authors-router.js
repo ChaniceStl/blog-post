@@ -17,7 +17,6 @@ const postAuthor = (req, res) => {
   console.log(req.body)
   Author.create({ name: req.body,
                   email: req.body,
-                  password: req.body,
                   bio: req.body,
                   articles: req.body
                 },
